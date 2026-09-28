@@ -61,7 +61,7 @@ button,input,select{font:inherit;color:inherit}
 .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600}
 
 /* header */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:14px 0;border-bottom:1px solid var(--line)}
+header.top{position:relative;z-index:20;background:var(--bg);padding-block:14px 0;border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:20px}
 .logo svg{flex:none}
@@ -69,9 +69,18 @@ a.logo{color:inherit;text-decoration:none;border-radius:10px;cursor:pointer}
 a.logo:hover{color:var(--accent)}
 a.logo:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 .logo small{display:block;font-family:var(--body);font-weight:400;font-size:13px;color:var(--ink-3);letter-spacing:0}
-.search{position:relative;flex:1 1 320px;max-width:440px}
-.search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.searchhero{display:flex;flex-direction:column;align-items:center;gap:10px;margin:22px auto 8px;max-width:680px;text-align:center}
+.searchlabel{font-family:var(--display);font-weight:700;font-size:clamp(18px,2.6vw,24px);color:var(--ink)}
+.search{position:relative;width:100%;text-align:left}
+.search input{width:100%;box-sizing:border-box;padding:15px 48px 15px 50px;font-size:17px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft),0 6px 20px rgba(0,0,0,.07)}
+.search > svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--accent)}
+.search .kbd{position:absolute;right:14px;top:50%;transform:translateY(-50%);font:600 12px var(--body);color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:var(--bg)}
+.search input:focus ~ .kbd{display:none}
+.quick{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;font-size:13px}
+.quick button{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px;font-weight:600}
+.quick button:hover{border-color:var(--accent);color:var(--accent)}
+@media (max-width:600px){.search input{font-size:16px;padding:13px 14px 13px 46px}.search .kbd{display:none}.searchhero{margin-top:14px}}
 .results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.14);max-height:320px;overflow:auto;z-index:30;padding:4px;margin:0;list-style:none}
 .results li{padding:8px 10px;border-radius:7px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
 .results li[aria-selected="true"],.results li:hover{background:var(--accent-soft)}
@@ -192,6 +201,37 @@ footer .linkbtn{margin-left:4px}
 .panel{grid-template-columns:minmax(0,1fr)}
 .crisis{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:14px;margin:0 0 12px;max-width:80ch}
 .crisis a{color:var(--accent)}
+.aboutgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}
+@media (max-width:760px){.aboutgrid{grid-template-columns:minmax(0,1fr)}}
+.bio p{max-width:65ch}
+.biohead{display:flex;align-items:center;gap:14px;margin:10px 0 6px}
+.biohead h2{margin:0;font-size:22px}.biohead p{margin:2px 0 0}
+.avatar{flex:none;width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:20px}
+.btn.lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;margin-top:4px}
+ul.plain{padding-left:18px;margin:8px 0 16px}ul.plain li{margin:6px 0}
+.tocgrid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px;align-items:start}
+.pmain{display:grid;gap:28px;min-width:0}
+.toc{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;padding:4px 0}
+.toch{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin:0 0 8px 12px}
+.toc ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.toc li{margin:0}
+.toc a{display:flex;justify-content:space-between;gap:8px;padding:6px 10px 6px 12px;margin-left:-2px;border-left:3px solid transparent;color:var(--ink-2);text-decoration:none;font-size:14px;line-height:1.3;border-radius:0 8px 8px 0}
+.toc a:hover{color:var(--ink);background:var(--surface-2)}
+.toc a.on{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-soft)}
+.tocn{font-size:12px;color:var(--ink-3);font-weight:500}
+.toc a.on .tocn{color:var(--accent)}
+.section{scroll-margin-top:20px}
+@media (max-width:999px){
+  .tocgrid{grid-template-columns:minmax(0,1fr);gap:16px}
+  .toc{top:0;z-index:20;max-height:none;overflow-x:auto;overflow-y:hidden;background:var(--bg);margin:0 -16px;padding:8px 16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .toc::-webkit-scrollbar{display:none}
+  .toch{display:none}
+  .toc ol{display:flex;gap:6px;border:0;width:max-content}
+  .toc a{margin:0;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:6px 12px;white-space:nowrap;font-size:13px}
+  .toc a.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+  .toc a.on .tocn{color:var(--accent-ink)}
+  .section{scroll-margin-top:64px}
+}
 .sum{display:grid;gap:16px}
 .sumhead h2{font-size:24px;margin:2px 0 6px}.sumhead p{margin:0;max-width:75ch;color:var(--ink-2)}
 .sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
@@ -255,11 +295,16 @@ footer a{color:var(--accent)}
       <svg id="aplogo" width="32" height="32" viewBox="0 0 30 30" aria-hidden="true"></svg>
       <div>Aperture<small>A snapshot of public health data. Open the scope to regions and states, or close it to counties and cities.</small></div>
     </a>
+  </div>
+  <div class="searchhero">
+    <label for="q" class="searchlabel">Look up health data for any place in the US</label>
     <div class="search" role="combobox" aria-expanded="false" aria-haspopup="listbox">
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <input id="q" type="search" placeholder="Find a county, city, state or region" autocomplete="off" aria-label="Find a county, city, state or region">
+      <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="County, city, state or region" autocomplete="off" enterkeyhint="search">
+      <kbd class="kbd" aria-hidden="true">/</kbd>
       <ul class="results" id="qres" role="listbox" hidden></ul>
     </div>
+    <div class="quick"><span class="faint">Try</span><button data-place="5363000">Seattle, WA</button><button data-place="17031">Cook County, IL</button><button data-place="TX">Texas</button><button data-place="pacific-northwest">Pacific Northwest</button></div>
   </div>
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="profile" aria-selected="true">Profile</button>
@@ -267,22 +312,24 @@ footer a{color:var(--accent)}
     <button role="tab" data-tab="trends" aria-selected="false">Trends</button>
     <button role="tab" data-tab="map" aria-selected="false">Map</button>
     <button role="tab" data-tab="data" aria-selected="false" class="tab-data"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2 2.5 3.4v4.1c0 3.5 2.4 6.1 5.5 7.3 3.1-1.2 5.5-3.8 5.5-7.3V3.4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m5.4 8.1 1.8 1.8 3.5-3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Data &amp; sources</button>
+    <button role="tab" data-tab="about" aria-selected="false">About</button>
   </nav>
 </header>
 
 <main>
-  <div class="trustbar" role="note"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2 2.5 3.4v4.1c0 3.5 2.4 6.1 5.5 7.3 3.1-1.2 5.5-3.8 5.5-7.3V3.4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m5.4 8.1 1.8 1.8 3.5-3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Every number is traceable.</b> Values come from 16 public datasets (CDC, HHS, CMS, HRSA, Census, County Health Rankings), captured September 25–27, 2026. Tap <span class="srcchip" aria-hidden="true">Source</span> on any row to see where it came from and open the original record.</span><button class="linkbtn" data-goto="data">Data &amp; sources</button></div>
+  <div class="trustbar" role="note"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2 2.5 3.4v4.1c0 3.5 2.4 6.1 5.5 7.3 3.1-1.2 5.5-3.8 5.5-7.3V3.4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m5.4 8.1 1.8 1.8 3.5-3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Every number is traceable.</b> Values come from 16 public datasets (CDC, HHS, CMS, HRSA, Census, County Health Rankings). Tap <span class="srcchip" aria-hidden="true">Source</span> on any row to see where it came from and open the original record.</span><button class="linkbtn" data-goto="data">Data &amp; sources</button></div>
   <div class="loading" id="loading">Loading data for 3,100+ counties…</div>
   <section class="panel" id="p-profile" hidden></section>
   <section class="panel" id="p-compare" hidden></section>
   <section class="panel" id="p-trends" hidden></section>
   <section class="panel" id="p-map" hidden></section>
   <section class="panel" id="p-data" hidden></section>
+  <section class="panel" id="p-about" hidden></section>
 </main>
 <dialog id="srcdlg" aria-labelledby="srcdlg-h"><div class="dlg"><button class="dlgx" aria-label="Close">×</button><div id="srcdlg-body"></div></div></dialog>
 
 <footer>
-  <div>Aperture shows public data from the CDC, HHS, CMS, the U.S. Census Bureau and County Health Rankings &amp; Roadmaps. It is not medical advice. <button class="linkbtn" data-goto="data">See every source, definition and method →</button></div>
+  <div>Aperture shows public data from the CDC, HHS, CMS, the U.S. Census Bureau and County Health Rankings &amp; Roadmaps. It is not medical advice. <button class="linkbtn" data-goto="data">See every source, definition and method →</button> · <button class="linkbtn" data-goto="about">About Aperture</button></div>
 </footer>
 </div>
 
@@ -599,6 +646,8 @@ function attachSearch(input,list,onPick){
   input.addEventListener("blur",()=>setTimeout(()=>{list.hidden=true;},120));
 }
 attachSearch(document.getElementById("q"),document.getElementById("qres"),i=>{setCur(i);setTab("profile");});
+document.querySelectorAll(".quick [data-place]").forEach(b=>{ if(!idx.has(b.dataset.place)){b.remove();return;} b.onclick=()=>{S.tab="profile"; tabs.forEach(t=>t.setAttribute("aria-selected",t.dataset.tab==="profile")); setCur(idx.get(b.dataset.place));}; });
+document.addEventListener("keydown",e=>{ if(e.key==="/"&&!e.metaKey&&!e.ctrlKey&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")){ e.preventDefault(); const q=document.getElementById("q"); q.focus(); q.scrollIntoView({block:"center",behavior:"smooth"}); } });
 
 function syncURL(){ try{ history.replaceState(null,"",location.pathname+"?place="+encodeURIComponent(FIPS[S.cur])+"#"+S.tab); document.title=label(S.cur)+" · Aperture"; }catch(e){} }
 function setCur(i){ S.cur=i; store.set("cur",FIPS[i]); syncURL(); render(); window.scrollTo({top:0}); }
@@ -610,7 +659,7 @@ tabs.forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
 function goHome(){ S.tab="profile"; tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.tab==="profile")); setCur(idx.get("53033")); }
 document.getElementById("homelink").addEventListener("click",e=>{ if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1)return; e.preventDefault(); goHome(); });
 function setTab(t){ S.tab=t; tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t)); syncURL(); render(); }
-const h=(location.hash||"").slice(1); if(["profile","compare","trends","map","data"].includes(h)) S.tab=h;
+const h=(location.hash||"").slice(1); if(["profile","compare","trends","map","data","about"].includes(h)) S.tab=h;
 tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===S.tab));
 
 // ---------- small charts ----------
@@ -654,6 +703,15 @@ function insights(i){
 const NOTE={city:"Cities have CDC PLACES health estimates and Census community measures. Other sources, such as death records, Medicare and County Health Rankings, are only published for counties, states and the nation.",
  state:"State values use the official state figure where the source publishes one (County Health Rankings, CMS Medicare). Otherwise they are population-weighted averages of the state’s county estimates.",
  region:"Region values are population-weighted averages of the member states’ values."};
+let tocLock=0;
+function tocOffset(){ const bar=document.querySelector(".toc"); return (bar&&getComputedStyle(bar).position==="sticky"&&innerWidth<1000)?bar.offsetHeight+14:20; }
+function setTocActive(id){ const nav=document.querySelector(".toc"); if(!nav)return; nav.querySelectorAll("a").forEach(a=>{ const on=a.dataset.sec===id; a.classList.toggle("on",on); if(on){ a.setAttribute("aria-current","location"); if(innerWidth<1000){ const l=a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2; nav.scrollTo({left:l,behavior:"smooth"}); } } else a.removeAttribute("aria-current"); }); }
+function spyToc(){ if(S.tab!=="profile")return; if(Date.now()-tocLock<900)return; const links=[...document.querySelectorAll(".toc a")]; if(!links.length)return; const lim=tocOffset()+40; let cur=links[0].dataset.sec;
+  for(const a of links.slice(1)){ const t=document.getElementById(a.dataset.sec); if(t&&t.getBoundingClientRect().top<=lim) cur=a.dataset.sec; }
+  if(innerHeight+scrollY>=document.documentElement.scrollHeight-4) cur=links[links.length-1].dataset.sec;
+  setTocActive(cur); }
+let tocRaf=0; window.addEventListener("scroll",()=>{ if(tocRaf)return; tocRaf=requestAnimationFrame(()=>{tocRaf=0;spyToc();}); },{passive:true});
+window.addEventListener("scrollend",()=>{ tocLock=0; spyToc(); });
 function renderProfile(){
   const i=S.cur, el=document.getElementById("p-profile");
   const le=MEAS.LIFEEXP, lev=le?le.latest[i]:NaN;
@@ -661,10 +719,11 @@ function renderProfile(){
     <div class="meta"><span><b>${fmtPop(POP[i])}</b> residents</span>${isNaN(lev)?"":`<span>Life expectancy <b>${lev.toFixed(1)} years</b> <span class="faint">(US ${le.us.toFixed(1)})</span></span>`}${TYPE[i]==="county"?`<span class="faint">FIPS ${FIPS[i]}</span>`:""}</div>${NOTE[TYPE[i]]?`<p class="note" style="margin-top:6px">${NOTE[TYPE[i]]}</p>`:""}
     <div class="actions"><button class="btn primary" id="toCmp">${S.cmp.includes(i)?"In comparison ✓":"Add to comparison"}</button>${TYPE[i]==="county"?`<button class="btn" id="toMap">See on the map</button>`:""}</div></div>`;
   html+=insights(i);
+  const toc=[];
   html+=`<div class="legend-row"><span><i class="dot" style="background:var(--bad)"></i>Among the worst 25% of ${PEERN[TYPE[i]]}</span><span><i class="dot" style="background:var(--mid)"></i>Middle</span><span><i class="dot" style="background:var(--good)"></i>Among the best 25%</span><span><i style="width:2px;height:14px;background:var(--ink-2)"></i>US average</span><span><i style="width:2px;height:10px;background:var(--ink-3)"></i>${TYPE[i]==="county"||TYPE[i]==="city"?(STATES[ST[i]]||ST[i])+" average":""}</span><span><i style="width:22px;height:9px;border:1px solid var(--line);background:var(--surface-2);border-radius:2px"></i>Middle half of US ${PEERN[TYPE[i]]}</span></div>`;
   for(const [cat,title,desc] of CATS){
-    const ms=byCat(cat).filter(m=>!isNaN(m.latest[i])); if(!ms.length) continue;
-    html+=`<div class="section"><h2>${title}</h2><p>${desc}</p>${cat==="Mental health"?`<div class="crisis" role="note"><b>If you or someone you know is struggling or in crisis,</b> call or text <b>988</b> (Suicide &amp; Crisis Lifeline), or chat at <a href="https://988lifeline.org" target="_blank" rel="noopener">988lifeline.org</a>. Free, confidential, 24/7.</div>${(TYPE[i]==="county"||TYPE[i]==="city")&&STIDX[ST[i]]!=null?`<p class="faint small" style="margin-top:8px">Youth mental health and weekly anxiety and depression surveys are only published for states. <button class="linkbtn" data-state="${STIDX[ST[i]]}">See ${esc(STATES[ST[i]]||ST[i])}’s mental health measures</button></p>`:""}`:""}<div class="rows">`;
+    const ms=byCat(cat).filter(m=>!isNaN(m.latest[i])); if(!ms.length) continue; const sid="sec-"+cat.toLowerCase().replace(/[^a-z0-9]+/g,"-"); toc.push([sid,title,ms.length]);
+    html+=`<div class="section" id="${sid}"><h2>${title}</h2><p>${desc}</p>${cat==="Mental health"?`<div class="crisis" role="note"><b>If you or someone you know is struggling or in crisis,</b> call or text <b>988</b> (Suicide &amp; Crisis Lifeline), or chat at <a href="https://988lifeline.org" target="_blank" rel="noopener">988lifeline.org</a>. Free, confidential, 24/7.</div>${(TYPE[i]==="county"||TYPE[i]==="city")&&STIDX[ST[i]]!=null?`<p class="faint small" style="margin-top:8px">Youth mental health and weekly anxiety and depression surveys are only published for states. <button class="linkbtn" data-state="${STIDX[ST[i]]}">See ${esc(STATES[ST[i]]||ST[i])}’s mental health measures</button></p>`:""}`:""}<div class="rows">`;
     for(const m of ms){
       const v=m.latest[i];
       html+=`<div class="row" data-m="${m.id}" tabindex="0" title="Show trend"><div class="lab">${esc(m.label)}<small>${say(m,v,false)}</small><small class="srcy">${m.lsrc&&m.lsrc[i]==="4"?"2022":esc(m.dy)} · ${SRC[m.src]||""} <button class="srcchip" data-src="${m.id}" aria-label="Source and verification for ${esc(m.label)}">Source</button></small></div>
@@ -673,12 +732,14 @@ function renderProfile(){
     }
     html+=`</div></div>`;
   }
-  el.innerHTML=html;
+  el.innerHTML=`<div class="tocgrid"><nav class="toc" aria-label="Sections on this page"><span class="toch">On this page</span><ol><li><a href="#sec-overview" data-sec="sec-overview">Overview</a></li>${toc.map(([id,t,n])=>`<li><a href="#${id}" data-sec="${id}">${esc(t)}<span class="tocn">${n}</span></a></li>`).join("")}</ol></nav><div class="pmain"><div id="sec-overview" class="secanchor"></div>${html}</div></div>`;
+  el.querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{ e.preventDefault(); const t=document.getElementById(a.dataset.sec); if(!t)return; tocLock=Date.now(); setTocActive(a.dataset.sec); const y=a.dataset.sec==="sec-overview"?el.getBoundingClientRect().top+scrollY-8:t.getBoundingClientRect().top+scrollY-tocOffset(); window.scrollTo({top:Math.max(0,y),behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); });
+  spyToc();
   el.querySelector("#toCmp").onclick=()=>{addCmp(i);setTab("compare");};
   const tm=el.querySelector("#toMap"); if(tm) tm.onclick=()=>{setTab("map");};
   el.querySelectorAll("[data-state]").forEach(b=>b.onclick=()=>{setCur(+b.dataset.state);});
   el.querySelectorAll(".row").forEach(r=>{const go=(e)=>{if(e&&e.target&&e.target.closest(".srcchip"))return;window.scrollTo({top:0});const m=MEAS[r.dataset.m]; if(m.trend){S.trendM=m.id;store.set("trendM",m.id);setTab("trends");}else{S.mapM=m.id;store.set("mapM",m.id);setTab("map");}}; r.onclick=go; r.onkeydown=e=>{if(e.key==="Enter"&&!e.target.closest(".srcchip"))go();};});
-  el.insertAdjacentHTML("beforeend",`<div class="dlrow"><button class="btn" id="csvP">Download these numbers (CSV)</button><span class="faint">Includes each value’s source, year and a link to check it.</span></div>`);
+  el.querySelector(".pmain").insertAdjacentHTML("beforeend",`<div class="dlrow"><button class="btn" id="csvP">Download these numbers (CSV)</button><span class="faint">Includes each value’s source, year and a link to check it.</span></div>`);
   el.querySelector("#csvP").onclick=()=>downloadCSV([i],"aperture-"+FIPS[i]+".csv");
 }
 
@@ -906,6 +967,35 @@ function downloadCSV(list,fname){
   const blob=new Blob([text],{type:"text/csv"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
 }
+/* ---- About page: edit ABOUT to change the bio and links ---- */
+const ABOUT={
+  name:"[Your name]",
+  role:"[Your title or role, e.g. Public health analyst]",
+  bio:["[A few sentences about you: your background, what you work on, and why you care about public health data.]",
+       "[Why you built Aperture and who you hope it helps.]"],
+  linkedin:"https://www.linkedin.com/in/[your-profile]",
+  placeholder:true
+};
+function renderAbout(){
+  const el=document.getElementById("p-about");
+  const ini=ABOUT.placeholder?"?":ABOUT.name.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+  el.innerHTML=`<div class="hero"><span class="eyebrow">About</span><h1>About Aperture</h1><p class="muted" style="margin:0;max-width:70ch">Aperture is a snapshot of public health data. Like a camera’s aperture, you can open the scope to see regions and states, or close it to focus on counties and cities.</p></div>
+  <div class="aboutgrid">
+    <section class="card bio">
+      <span class="eyebrow">Created by</span>
+      <div class="biohead"><div class="avatar" aria-hidden="true">${esc(ini)}</div><div><h2>${esc(ABOUT.name)}</h2><p class="muted">${esc(ABOUT.role)}</p></div></div>
+      ${ABOUT.bio.map(p=>`<p>${esc(p)}</p>`).join("")}
+      <a class="btn primary lnk" href="${esc(ABOUT.linkedin)}" target="_blank" rel="noopener">Connect on LinkedIn <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3H3v10h10v-3M9 3h4v4M13 3 7 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </section>
+    <section class="card">
+      <h3>What Aperture does</h3>
+      <ul class="plain"><li><b>Plain language.</b> Every measure is described in everyday words, with a clear sense of whether higher is better or worse.</li><li><b>Compare places.</b> Put counties, cities, states and regions side by side, with a written summary.</li><li><b>Trends.</b> See how each measure has changed over the years.</li><li><b>Verifiable.</b> Every number links back to the public dataset it came from.</li></ul>
+      <h3>An independent project</h3>
+      <p class="muted">Aperture is not affiliated with or endorsed by the CDC, HHS, CMS, HRSA, the Census Bureau or County Health Rankings &amp; Roadmaps. It is not medical advice.</p>
+      <button class="linkbtn" data-goto="data">See every source and method →</button>
+    </section>
+  </div>`;
+}
 function renderData(){
   const el=document.getElementById("p-data"); const i=S.cur;
   const srcRows=Object.entries(DS).map(([k,d])=>`<tr><td><a href="${d.url}" target="_blank" rel="noopener">${esc(d.name)}</a><span class="faint small">${esc(d.pub)}</span></td><td class="mono small">${esc(d.id)}${d.also?`<span class="faint">${d.also.map(a=>esc(a[0])+": "+esc(a[1])).join("<br>")}</span>`:""}</td><td>${esc(d.years)}</td><td>${esc(d.geo)}</td></tr>`).join("");
@@ -980,8 +1070,8 @@ const SCOPE_R={region:8.2,state:6.4,county:4.4,city:2.8};
 function setAperture(){ const el=document.getElementById("aplogo"); if(!el) return; const t=TYPE[S.cur]; el.innerHTML=apertureSVG(SCOPE_R[t]||4.4); el.setAttribute("aria-label","Aperture logo, scope: "+TYPELBL[t]); }
 function render(){
   document.getElementById("loading").hidden=true; setAperture();
-  for(const t of ["profile","compare","trends","map","data"]) document.getElementById("p-"+t).hidden=t!==S.tab;
-  ({profile:renderProfile,compare:renderCompare,trends:renderTrends,map:renderMap,data:renderData})[S.tab]();
+  for(const t of ["profile","compare","trends","map","data","about"]) document.getElementById("p-"+t).hidden=t!==S.tab;
+  ({profile:renderProfile,compare:renderCompare,trends:renderTrends,map:renderMap,data:renderData,about:renderAbout})[S.tab]();
 }
 syncURL(); render();
 })();
