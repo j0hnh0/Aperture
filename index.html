@@ -234,6 +234,23 @@ ul.plain{padding-left:18px;margin:8px 0 16px}ul.plain li{margin:6px 0}
   .section{scroll-margin-top:64px}
 }
 .rows:empty{display:none}
+.welcome{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow-y:auto;padding:24px 16px;background:radial-gradient(1200px 700px at 50% 18%,var(--accent-soft),transparent 70%),var(--bg);transition:opacity .45s ease,transform .45s ease}
+.welcome.out{opacity:0;transform:scale(1.04);pointer-events:none}
+html.wl-lock,html.wl-lock body{overflow:hidden}
+.wl-inner{max-width:620px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.wl-iris{width:min(132px,30vw);height:auto;margin-bottom:6px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.12))}
+.wl-inner h1{font-size:clamp(40px,8vw,64px);line-height:1;margin:0}
+.wl-lead{font-size:clamp(17px,2.4vw,20px);color:var(--ink-2);margin:4px 0 6px;max-width:34ch}
+.wl-list{list-style:none;margin:6px 0 4px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;width:100%}
+.wl-list li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--ink-2);line-height:1.45}
+.wl-list li b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+.wl-scope{font-size:14px;color:var(--ink-2);margin:6px 0 4px;max-width:46ch}
+.wl-go{display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:14px 26px;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:700 17px var(--body);cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.14);transition:transform .15s ease,box-shadow .15s ease}
+.wl-go:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.wl-go:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.wl-foot{font-size:12px;color:var(--ink-3);margin:8px 0 0;max-width:52ch}
+@media (max-width:560px){.wl-list{grid-template-columns:1fr;gap:7px}.welcome{place-items:start center;padding:18px 16px}.wl-inner{gap:6px}.wl-iris{width:78px;margin-bottom:0}.wl-inner h1{font-size:40px}.wl-lead{font-size:16px;margin:0 0 4px}.wl-list li{padding:9px 12px;font-size:13px}.wl-list li b{font-size:14px;display:inline;margin-right:4px}.wl-scope{font-size:13px;margin:4px 0 0}.wl-go{margin-top:6px}}
+@media (prefers-reduced-motion:reduce){.welcome{transition:none}}
 .sum{display:grid;gap:16px}
 .sumhead h2{font-size:24px;margin:2px 0 6px}.sumhead p{margin:0;max-width:75ch;color:var(--ink-2)}
 .sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
@@ -290,6 +307,47 @@ footer a{color:var(--accent)}
 <noscript><p style="padding:24px;font-family:system-ui">Aperture needs JavaScript to show public health data.</p></noscript>
 
 
+<div id="welcome" class="welcome" role="dialog" aria-modal="true" aria-labelledby="wl-h" aria-describedby="wl-lead">
+  <div class="wl-inner">
+    <svg id="wl-iris" class="wl-iris" viewBox="0 0 30 30" aria-hidden="true"></svg>
+    <span class="eyebrow">Welcome to</span>
+    <h1 id="wl-h">Aperture</h1>
+    <p id="wl-lead" class="wl-lead">A plain-language snapshot of public health data for every community in the United States.</p>
+    <ul class="wl-list">
+      <li><b>Look up any place.</b> 3,100+ counties, 2,300+ cities, every state and 22 regions.</li>
+      <li><b>Compare side by side.</b> See where places differ, with a written summary of what stands out.</li>
+      <li><b>Follow the trends.</b> See how each measure has changed over the years.</li>
+      <li><b>Check every number.</b> Each value links back to the public dataset it came from.</li>
+    </ul>
+    <p class="wl-scope">Like a camera, you control the scope: open it wide to regions and states, or focus in on counties and cities.</p>
+    <button id="wl-go" class="wl-go" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Open the aperture</button>
+    <p class="wl-foot">Free, no sign-up. Data from 20 public datasets (CDC, HHS, CMS, HRSA, Census, County Health Rankings). Not medical advice.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var el=document.getElementById("welcome"); if(!el) return;
+  var q=location.search||"", h=location.hash||"", seen=false;
+  try{ seen=sessionStorage.getItem("ap.welcomed")==="1"; }catch(e){}
+  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function iris(r){ var C=15,R=12.6,rot=r*9*Math.PI/180,V=[],k; for(k=0;k<6;k++){var a=rot+k*Math.PI/3;V.push([C+r*Math.cos(a),C+r*Math.sin(a)]);}
+    var lines=""; for(k=0;k<6;k++){ var p=V[k],n=V[(k+1)%6],dx=n[0]-p[0],dy=n[1]-p[1],L=Math.hypot(dx,dy); dx/=L; dy/=L;
+      var fx=p[0]-C,fy=p[1]-C,b=fx*dx+fy*dy,c=fx*fx+fy*fy-R*R,t=-b+Math.sqrt(b*b-c);
+      lines+='<line x1="'+p[0].toFixed(2)+'" y1="'+p[1].toFixed(2)+'" x2="'+(p[0]+t*dx).toFixed(2)+'" y2="'+(p[1]+t*dy).toFixed(2)+'"/>'; }
+    return '<circle cx="15" cy="15" r="13.6" fill="var(--accent)"/><g stroke="var(--bg)" stroke-width="1.1" stroke-linecap="round">'+lines+'</g><polygon points="'+V.map(function(p){return p[0].toFixed(2)+","+p[1].toFixed(2);}).join(" ")+'" fill="var(--bg)"/>'; }
+  var svg=document.getElementById("wl-iris"), cur=1.2, raf=0;
+  function tween(to,ms,done){ cancelAnimationFrame(raf); if(reduce){cur=to;svg.innerHTML=iris(cur);done&&done();return;} var from=cur,t0=performance.now();
+    (function step(t){ var k=Math.min(1,(t-t0)/ms), e=1-Math.pow(1-k,3); cur=from+(to-from)*e; svg.innerHTML=iris(cur); if(k<1) raf=requestAnimationFrame(step); else done&&done(); })(t0); }
+  function show(){ el.hidden=false; el.classList.remove("out"); document.documentElement.classList.add("wl-lock"); cur=1.2; svg.innerHTML=iris(cur); tween(5.2,1400);
+    setTimeout(function(){ try{document.getElementById("wl-go").focus({preventScroll:true});}catch(e){} },60); }
+  function enter(){ try{sessionStorage.setItem("ap.welcomed","1");}catch(e){} tween(12.4,reduce?0:650,function(){ el.classList.add("out"); document.documentElement.classList.remove("wl-lock");
+      setTimeout(function(){ el.hidden=true; var q=document.getElementById("q"); }, reduce?0:450); }); }
+  window.showWelcome=show;
+  document.getElementById("wl-go").addEventListener("click",enter);
+  el.addEventListener("keydown",function(e){ if(e.key==="Escape"){ e.preventDefault(); enter(); } if(e.key==="Tab"){ e.preventDefault(); document.getElementById("wl-go").focus(); } });
+  if(/[?&](place|county)=/.test(q)||h.length>1||seen){ el.hidden=true; } else show();
+})();
+</script>
 <div class="wrap">
 <header class="top">
   <div class="brand">
@@ -1037,6 +1095,7 @@ function renderAbout(){
       <h3>An independent project</h3>
       <p class="muted">Aperture is not affiliated with or endorsed by the CDC, HHS, CMS, HRSA, the Census Bureau or County Health Rankings &amp; Roadmaps. It is not medical advice.</p>
       <button class="linkbtn" data-goto="data">See every source and method →</button>
+      <p style="margin:14px 0 0"><button class="linkbtn" onclick="window.showWelcome&&window.showWelcome()">See the welcome screen again</button></p>
     </section>
   </div>`;
 }
