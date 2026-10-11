@@ -236,6 +236,7 @@ ul.plain{padding-left:18px;margin:8px 0 16px}ul.plain li{margin:6px 0}
 .rows:empty{display:none}
 .welcome{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow-y:auto;padding:24px 16px;background:radial-gradient(1200px 700px at 50% 18%,var(--accent-soft),transparent 70%),var(--bg);transition:opacity .45s ease,transform .45s ease}
 .welcome.out{opacity:0;transform:scale(1.04);pointer-events:none}
+.wl-shutter{position:fixed;inset:0;width:100vw;height:100vh;z-index:101;pointer-events:none;display:block}
 html.wl-lock,html.wl-lock body{overflow:hidden}
 .wl-inner{max-width:620px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
 .wl-iris{width:min(132px,30vw);height:auto;margin-bottom:6px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.12))}
@@ -324,6 +325,7 @@ footer a{color:var(--accent)}
     <p class="wl-foot">Free, no sign-up. Data from 20 public datasets (CDC, HHS, CMS, HRSA, Census, County Health Rankings). Not medical advice.</p>
   </div>
 </div>
+<svg id="wl-shutter" class="wl-shutter" aria-hidden="true" hidden></svg>
 <script>
 (function(){
   var el=document.getElementById("welcome"); if(!el) return;
@@ -340,8 +342,25 @@ footer a{color:var(--accent)}
     (function step(t){ var k=Math.min(1,(t-t0)/ms), e=1-Math.pow(1-k,3); cur=from+(to-from)*e; svg.innerHTML=iris(cur); if(k<1) raf=requestAnimationFrame(step); else done&&done(); })(t0); }
   function show(){ el.hidden=false; el.classList.remove("out"); document.documentElement.classList.add("wl-lock"); cur=1.2; svg.innerHTML=iris(cur); tween(5.2,1400);
     setTimeout(function(){ try{document.getElementById("wl-go").focus({preventScroll:true});}catch(e){} },60); }
-  function enter(){ try{sessionStorage.setItem("ap.welcomed","1");}catch(e){} tween(12.4,reduce?0:650,function(){ el.classList.add("out"); document.documentElement.classList.remove("wl-lock");
-      setTimeout(function(){ el.hidden=true; var q=document.getElementById("q"); }, reduce?0:450); }); }
+  var sh=document.getElementById("wl-shutter"), busy=false;
+  function shutter(r){ var W=innerWidth,H=innerHeight,cx=W/2,cy=H/2,Rm=Math.hypot(W,H)/2+40,rot=(r/Rm)*2.1+0.35,V=[],k,d="M0 0H"+W+"V"+H+"H0Z M";
+    sh.setAttribute("viewBox","0 0 "+W+" "+H);
+    for(k=0;k<6;k++){ var a=rot+k*Math.PI/3; V.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]); }
+    d+=V.map(function(p){return p[0].toFixed(1)+" "+p[1].toFixed(1);}).join(" L")+"Z";
+    var lines=""; for(k=0;k<6;k++){ var p=V[k],n=V[(k+1)%6],dx=n[0]-p[0],dy=n[1]-p[1],L=Math.hypot(dx,dy)||1; if(L<0.5){ var a2=rot+k*Math.PI/3+2*Math.PI/3; dx=Math.cos(a2); dy=Math.sin(a2); L=1; }
+      lines+='<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+(p[0]+dx/L*Rm*2.2).toFixed(1)+'" y2="'+(p[1]+dy/L*Rm*2.2).toFixed(1)+'"/>'; }
+    sh.innerHTML='<path d="'+d+'" fill="var(--accent)" fill-rule="evenodd"/><g stroke="var(--bg)" stroke-opacity=".55" stroke-width="3" stroke-linecap="round">'+lines+'</g>';
+    return Rm; }
+  function anim(from,to,ms,ease,done){ var t0=performance.now(); (function step(t){ var k=Math.min(1,(t-t0)/ms); shutter(from+(to-from)*ease(k)); if(k<1) requestAnimationFrame(step); else done&&done(); })(t0); }
+  function enter(){ if(busy) return; busy=true; try{sessionStorage.setItem("ap.welcomed","1");}catch(e){}
+    function finish(){ el.hidden=true; el.classList.remove("out"); document.documentElement.classList.remove("wl-lock"); busy=false; }
+    if(reduce){ finish(); return; }
+    tween(0.2,420);
+    var Rm=shutter(Math.hypot(innerWidth,innerHeight)/2+40); sh.removeAttribute("hidden");
+    anim(Rm,0,460,function(k){return k*k*k;},function(){
+      finish(); window.scrollTo(0,0);
+      setTimeout(function(){ anim(0,Rm,820,function(k){return 1-Math.pow(1-k,3);},function(){ sh.setAttribute("hidden",""); sh.innerHTML=""; }); },140);
+    }); }
   window.showWelcome=show;
   document.getElementById("wl-go").addEventListener("click",enter);
   el.addEventListener("keydown",function(e){ if(e.key==="Escape"){ e.preventDefault(); enter(); } if(e.key==="Tab"){ e.preventDefault(); document.getElementById("wl-go").focus(); } });
