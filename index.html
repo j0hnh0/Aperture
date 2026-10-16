@@ -255,6 +255,10 @@ html.wl-lock,html.wl-lock body{overflow:hidden}
 .wl-foot{font-size:12px;color:var(--ink-3);margin:8px 0 0;max-width:52ch}
 @media (max-width:560px){.wl-list{grid-template-columns:1fr;gap:7px}.welcome{place-items:start center;padding:18px 16px}.wl-inner{gap:6px}.wl-iris{width:78px;margin-bottom:0}.wl-inner h1{font-size:40px}.wl-lead{font-size:16px;margin:0 0 4px}.wl-list li{padding:9px 12px;font-size:13px}.wl-list li b{font-size:14px;display:inline;margin-right:4px}.wl-scope{font-size:13px;margin:4px 0 0}.wl-go{margin-top:6px}}
 @media (prefers-reduced-motion:reduce){.welcome{transition:none}}
+.tp-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 4px}
+.tp-lab{font-size:13px;font-weight:600;color:var(--ink-3);margin-right:2px}
+.tp-us{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-2);margin-left:auto;cursor:pointer}
+@media (max-width:640px){.tp-us{margin-left:0}.tp-bar .cmp-add{flex:1 1 100%}}
 .sum{display:grid;gap:16px}
 .sumhead h2{font-size:24px;margin:2px 0 6px}.sumhead p{margin:0;max-width:75ch;color:var(--ink-2)}
 .sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
@@ -744,6 +748,7 @@ const store={get(k,d){try{const v=localStorage.getItem("chc."+k);return v?JSON.p
 const S={
   cur: (()=>{ let q=null; try{ const u=new URLSearchParams(location.search); q=u.get("place")||u.get("county"); }catch(e){} const f=(q&&idx.has(q))?q:store.get("cur","53033"); return idx.has(f)?idx.get(f):idx.get("53033"); })(),
   cmp: store.get("cmp4",["53033","06001"]).filter(f=>idx.has(f)).map(f=>idx.get(f)).slice(0,4),
+  tp: (store.get("tp",null)||null), tpUS: store.get("tpUS",true),
   tab: "profile", trendM: store.get("trendM","OBESITY"), mapM: store.get("mapM","LIFEEXP")
 };
 if(!MEAS[S.trendM]||!MEAS[S.trendM].trend) S.trendM="OBESITY";
@@ -971,19 +976,28 @@ function lineChart(m,list){
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.label)} over time">${g}</svg>`;
 }
 function renderTrends(){
-  const el=document.getElementById("p-trends"); const m=MEAS[S.trendM]; const i=S.cur;
-  const people=[S.cur,...S.cmp.filter(c=>c!==S.cur)].slice(0,4);
-  const list=people.map((c,k)=>({i:c,name:shortName(c),color:SERIES[k]})).concat([{i:-1,name:"US average",color:"var(--ink-3)",dash:true}]);
+  const el=document.getElementById("p-trends"); const m=MEAS[S.trendM];
+  let people=(S.tp||[]).filter(f=>idx.has(f)).map(f=>idx.get(f));
+  if(!people.length) people=[S.cur,...S.cmp.filter(c=>c!==S.cur)].slice(0,4);
+  const i=people[0];
+  const saveTP=p=>{ S.tp=p.map(j=>FIPS[j]); store.set("tp",S.tp); };
+  const list=people.map((c,k)=>({i:c,name:shortName(c),color:SERIES[k]})).concat(S.tpUS?[{i:-1,name:"US average",color:"var(--ink-3)",dash:true}]:[]);
   // change table for current county
   const rows=[];
   for(const x of Object.values(MEAS)){ if(!x.trend||x.dir===0||x.id==="COLON_SCREEN"||x.src==="hps")continue; const pts=x.trend.years.map((y,k)=>[y,x.trend.arrs[k][i]]).filter(p=>!isNaN(p[1])); if(pts.length<2)continue; const d=pts[pts.length-1][1]-pts[0][1]; rows.push({x,a:pts[0],b:pts[pts.length-1],d,z:d/x.iqr}); }
   rows.sort((a,b)=>Math.abs(b.z)-Math.abs(a.z));
   el.innerHTML=`<div class="hero"><span class="eyebrow">Over time</span><h1>${esc(m.label)} in ${esc(the(i))}</h1><p class="muted" style="margin:0;max-width:68ch">${isNaN(m.latest[i])?"No recent value for this place.":say(m,m.latest[i],false)+" ("+esc(m.dy)+")."} The chart shows the places you’re comparing and the US average for each year.</p></div>
-  <div class="controls"><label for="tm">Measure<select id="tm">${measureOptions(m.id,x=>!!x.trend)}</select></label></div>
+   <div class="controls"><label for="tm">Measure<select id="tm">${measureOptions(m.id,x=>!!x.trend)}</select></label></div>
+   <div class="tp-bar"><span class="tp-lab">Places on the chart</span>${people.map((c,k)=>`<span class="pill"><i style="background:${SERIES[k]}"></i>${esc(label(c))}${people.length>1?`<button data-tprm="${c}" aria-label="Remove ${esc(label(c))} from the chart">×</button>`:""}</span>`).join("")}
+   ${people.length<4?`<div class="cmp-add"><input id="tpq" placeholder="+ Add a place to the chart" autocomplete="off" aria-label="Add a place to the trend chart"><ul class="results" id="tpres" hidden></ul></div>`:""}
+   <label class="tp-us"><input type="checkbox" id="tpus" ${S.tpUS?"checked":""}> US average</label></div>
   <div class="two"><div class="card">${lineChart(m,list)}</div>
   <div class="card"><h3>What changed most in ${esc(the(i))}</h3><p class="faint" style="margin:0 0 8px;font-size:13px">Earliest to latest year, ranked by how large the change is compared with the usual spread between counties.</p><div class="chg">${rows.slice(0,10).map(r=>{const worse=(r.d>0)===(r.x.dir<0);return `<div><button class="btn" style="border:0;padding:0;background:none;text-align:left;font-weight:600" data-tm="${r.x.id}">${esc(r.x.label)}</button><span class="faint mono">${r.a[0]}–${r.b[0]}</span><span class="d" style="color:${Math.abs(r.z)<.1?"var(--ink-3)":worse?"var(--bad)":"var(--good)"}">${fmtDelta(r.x,r.d)}</span></div>`;}).join("")}</div></div></div>
   <p class="note">${m.id==="COLON_SCREEN"?"The age range for colorectal screening changed from 50–75 to 45–75 in 2022 data, so the jump in that year partly reflects the new definition. ":""}${m.src==="places"?"Each point is a separate CDC PLACES release. CDC updates its survey weights and models between releases, so treat changes under about one percentage point as noise.":esc(SRC[m.src]||"")+". "+esc(m.trendNote)} ${m.unit!=="%"&&UNITCAP[m.unit]?"Values are "+UNITCAP[m.unit]+".":""}</p>`;
   el.querySelector("#tm").onchange=e=>{S.trendM=e.target.value;store.set("trendM",S.trendM);renderTrends();};
+  el.querySelectorAll("[data-tprm]").forEach(b=>b.onclick=()=>{ saveTP(people.filter(c=>c!==+b.dataset.tprm)); renderTrends(); });
+  el.querySelector("#tpus").onchange=e=>{ S.tpUS=e.target.checked; store.set("tpUS",S.tpUS); renderTrends(); };
+  const tq=el.querySelector("#tpq"); if(tq) attachSearch(tq,el.querySelector("#tpres"),j=>{ if(!people.includes(j)) saveTP([...people,j].slice(0,4)); renderTrends(); setTimeout(()=>{const n=document.getElementById("tpq");n&&n.focus();},0); });
   el.querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>{S.trendM=b.dataset.tm;store.set("trendM",S.trendM);renderTrends();window.scrollTo({top:0,behavior:"smooth"});});
 }
 
