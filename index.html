@@ -446,6 +446,51 @@ td.v span{border-radius:4px}
 !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e=e||self).topojson=e.topojson||{})}(this,function(e){"use strict";function t(e){return e}function r(e){if(null==e)return t;var r,n,o=e.scale[0],a=e.scale[1],i=e.translate[0],c=e.translate[1];return function(e,t){t||(r=n=0);var u=2,f=e.length,s=new Array(f);for(s[0]=(r+=e[0])*o+i,s[1]=(n+=e[1])*a+c;u<f;)s[u]=e[u],++u;return s}}function n(e){var t,n=r(e.transform),o=1/0,a=o,i=-o,c=-o;function u(e){(e=n(e))[0]<o&&(o=e[0]),e[0]>i&&(i=e[0]),e[1]<a&&(a=e[1]),e[1]>c&&(c=e[1])}function f(e){switch(e.type){case"GeometryCollection":e.geometries.forEach(f);break;case"Point":u(e.coordinates);break;case"MultiPoint":e.coordinates.forEach(u)}}for(t in e.arcs.forEach(function(e){for(var t,r=-1,u=e.length;++r<u;)(t=n(e[r],r))[0]<o&&(o=t[0]),t[0]>i&&(i=t[0]),t[1]<a&&(a=t[1]),t[1]>c&&(c=t[1])}),e.objects)f(e.objects[t]);return[o,a,i,c]}function o(e,t){var r=t.id,n=t.bbox,o=null==t.properties?{}:t.properties,i=a(e,t);return null==r&&null==n?{type:"Feature",properties:o,geometry:i}:null==n?{type:"Feature",id:r,properties:o,geometry:i}:{type:"Feature",id:r,bbox:n,properties:o,geometry:i}}function a(e,t){var n=r(e.transform),o=e.arcs;function a(e,t){t.length&&t.pop();for(var r=o[e<0?~e:e],a=0,i=r.length;a<i;++a)t.push(n(r[a],a));e<0&&function(e,t){for(var r,n=e.length,o=n-t;o<--n;)r=e[o],e[o++]=e[n],e[n]=r}(t,i)}function i(e){return n(e)}function c(e){for(var t=[],r=0,n=e.length;r<n;++r)a(e[r],t);return t.length<2&&t.push(t[0]),t}function u(e){for(var t=c(e);t.length<4;)t.push(t[0]);return t}function f(e){return e.map(u)}return function e(t){var r,n=t.type;switch(n){case"GeometryCollection":return{type:n,geometries:t.geometries.map(e)};case"Point":r=i(t.coordinates);break;case"MultiPoint":r=t.coordinates.map(i);break;case"LineString":r=c(t.arcs);break;case"MultiLineString":r=t.arcs.map(c);break;case"Polygon":r=f(t.arcs);break;case"MultiPolygon":r=t.arcs.map(f);break;default:return null}return{type:n,coordinates:r}}(t)}function i(e,t){var r={},n={},o={},a=[],i=-1;function c(e,t){for(var n in e){var o=e[n];delete t[o.start],delete o.start,delete o.end,o.forEach(function(e){r[e<0?~e:e]=1}),a.push(o)}}return t.forEach(function(r,n){var o,a=e.arcs[r<0?~r:r];a.length<3&&!a[1][0]&&!a[1][1]&&(o=t[++i],t[i]=r,t[n]=o)}),t.forEach(function(t){var r,a,i=function(t){var r,n=e.arcs[t<0?~t:t],o=n[0];e.transform?(r=[0,0],n.forEach(function(e){r[0]+=e[0],r[1]+=e[1]})):r=n[n.length-1];return t<0?[r,o]:[o,r]}(t),c=i[0],u=i[1];if(r=o[c])if(delete o[r.end],r.push(t),r.end=u,a=n[u]){delete n[a.start];var f=a===r?r:r.concat(a);n[f.start=r.start]=o[f.end=a.end]=f}else n[r.start]=o[r.end]=r;else if(r=n[u])if(delete n[r.start],r.unshift(t),r.start=c,a=o[c]){delete o[a.end];var s=a===r?r:a.concat(r);n[s.start=a.start]=o[s.end=r.end]=s}else n[r.start]=o[r.end]=r;else n[(r=[t]).start=c]=o[r.end=u]=r}),c(o,n),c(n,o),t.forEach(function(e){r[e<0?~e:e]||a.push([e])}),a}function c(e,t,r){var n,o,a;if(arguments.length>1)n=function(e,t,r){var n,o=[],a=[];function i(e){var t=e<0?~e:e;(a[t]||(a[t]=[])).push({i:e,g:n})}function c(e){e.forEach(i)}function u(e){e.forEach(c)}return function e(t){switch(n=t,t.type){case"GeometryCollection":t.geometries.forEach(e);break;case"LineString":c(t.arcs);break;case"MultiLineString":case"Polygon":u(t.arcs);break;case"MultiPolygon":!function(e){e.forEach(u)}(t.arcs)}}(t),a.forEach(null==r?function(e){o.push(e[0].i)}:function(e){r(e[0].g,e[e.length-1].g)&&o.push(e[0].i)}),o}(0,t,r);else for(o=0,n=new Array(a=e.arcs.length);o<a;++o)n[o]=o;return{type:"MultiLineString",arcs:i(e,n)}}function u(e,t){var r={},n=[],o=[];function c(e){e.forEach(function(t){t.forEach(function(t){(r[t=t<0?~t:t]||(r[t]=[])).push(e)})}),n.push(e)}function u(t){return function(e){for(var t,r=-1,n=e.length,o=e[n-1],a=0;++r<n;)t=o,o=e[r],a+=t[0]*o[1]-t[1]*o[0];return Math.abs(a)}(a(e,{type:"Polygon",arcs:[t]}).coordinates[0])}return t.forEach(function e(t){switch(t.type){case"GeometryCollection":t.geometries.forEach(e);break;case"Polygon":c(t.arcs);break;case"MultiPolygon":t.arcs.forEach(c)}}),n.forEach(function(e){if(!e._){var t=[],n=[e];for(e._=1,o.push(t);e=n.pop();)t.push(e),e.forEach(function(e){e.forEach(function(e){r[e<0?~e:e].forEach(function(e){e._||(e._=1,n.push(e))})})})}}),n.forEach(function(e){delete e._}),{type:"MultiPolygon",arcs:o.map(function(t){var n,o=[];if(t.forEach(function(e){e.forEach(function(e){e.forEach(function(e){r[e<0?~e:e].length<2&&o.push(e)})})}),(n=(o=i(e,o)).length)>1)for(var a,c,f=1,s=u(o[0]);f<n;++f)(a=u(o[f]))>s&&(c=o[0],o[0]=o[f],o[f]=c,s=a);return o}).filter(function(e){return e.length>0})}}function f(e,t){for(var r=0,n=e.length;r<n;){var o=r+n>>>1;e[o]<t?r=o+1:n=o}return r}function s(e){if(null==e)return t;var r,n,o=e.scale[0],a=e.scale[1],i=e.translate[0],c=e.translate[1];return function(e,t){t||(r=n=0);var u=2,f=e.length,s=new Array(f),l=Math.round((e[0]-i)/o),h=Math.round((e[1]-c)/a);for(s[0]=l-r,r=l,s[1]=h-n,n=h;u<f;)s[u]=e[u],++u;return s}}e.bbox=n,e.feature=function(e,t){return"string"==typeof t&&(t=e.objects[t]),"GeometryCollection"===t.type?{type:"FeatureCollection",features:t.geometries.map(function(t){return o(e,t)})}:o(e,t)},e.merge=function(e){return a(e,u.apply(this,arguments))},e.mergeArcs=u,e.mesh=function(e){return a(e,c.apply(this,arguments))},e.meshArcs=c,e.neighbors=function(e){var t={},r=e.map(function(){return[]});function n(e,r){e.forEach(function(e){e<0&&(e=~e);var n=t[e];n?n.push(r):t[e]=[r]})}function o(e,t){e.forEach(function(e){n(e,t)})}var a={LineString:n,MultiLineString:o,Polygon:o,MultiPolygon:function(e,t){e.forEach(function(e){o(e,t)})}};for(var i in e.forEach(function e(t,r){"GeometryCollection"===t.type?t.geometries.forEach(function(t){e(t,r)}):t.type in a&&a[t.type](t.arcs,r)}),t)for(var c=t[i],u=c.length,s=0;s<u;++s)for(var l=s+1;l<u;++l){var h,p=c[s],g=c[l];(h=r[p])[i=f(h,g)]!==g&&h.splice(i,0,g),(h=r[g])[i=f(h,p)]!==p&&h.splice(i,0,p)}return r},e.quantize=function(e,t){if(e.transform)throw new Error("already quantized");if(t&&t.scale)u=e.bbox;else{if(!((r=Math.floor(t))>=2))throw new Error("n must be ≥2");var r,o=(u=e.bbox||n(e))[0],a=u[1],i=u[2],c=u[3];t={scale:[i-o?(i-o)/(r-1):1,c-a?(c-a)/(r-1):1],translate:[o,a]}}var u,f,l=s(t),h=e.objects,p={};function g(e){return l(e)}function y(e){var t;switch(e.type){case"GeometryCollection":t={type:"GeometryCollection",geometries:e.geometries.map(y)};break;case"Point":t={type:"Point",coordinates:g(e.coordinates)};break;case"MultiPoint":t={type:"MultiPoint",coordinates:e.coordinates.map(g)};break;default:return e}return null!=e.id&&(t.id=e.id),null!=e.bbox&&(t.bbox=e.bbox),null!=e.properties&&(t.properties=e.properties),t}for(f in h)p[f]=y(h[f]);return{type:"Topology",bbox:u,transform:t,objects:p,arcs:e.arcs.map(function(e){var t,r=0,n=1,o=e.length,a=new Array(o);for(a[0]=l(e[0],0);++r<o;)((t=l(e[r],r))[0]||t[1])&&(a[n++]=t);return 1===n&&(a[n++]=[0,0]),a.length=n,a})}},e.transform=r,e.untransform=s,Object.defineProperty(e,"__esModule",{value:!0})});
 
 </script>
+<style id="snapcss">
+#snap{display:none}
+@media print{
+  @page{size:letter;margin:0.4in 0.45in}
+  body.snapping{background:#fff!important;padding:0!important;margin:0!important}
+  body.snapping > *:not(#snap){display:none!important}
+  body.snapping #snap{display:block!important}
+  #snap{color:#17252b;font-family:"Public Sans","Segoe UI",system-ui,sans-serif;font-size:10.5pt;line-height:1.35;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #snap .mono{font-family:"IBM Plex Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+  #snap .sn-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0b6b78;padding-bottom:6pt}
+  #snap .sn-brand{display:flex;align-items:center;gap:7pt}
+  #snap .sn-brand b{font-size:12.5pt;display:block;line-height:1.1}
+  #snap .sn-brand small{font-size:8.5pt;color:#4b5d63;text-transform:uppercase;letter-spacing:.08em}
+  #snap .sn-date{font-size:8pt;color:#4b5d63;text-align:right}
+  #snap .sn-place{margin:7pt 0 6pt}
+  #snap .sn-eye{font-size:8pt;text-transform:uppercase;letter-spacing:.08em;color:#4b5d63;font-weight:600}
+  #snap h1{font-size:22pt;line-height:1.05;margin:1pt 0 3pt;font-weight:700;letter-spacing:-.01em}
+  #snap .sn-facts{display:flex;gap:14pt;flex-wrap:wrap;color:#4b5d63;font-size:9.5pt}
+  #snap .sn-facts b{color:#17252b}
+  #snap .sn-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:7pt;margin-bottom:7pt;break-inside:avoid}
+  #snap .sn-card{border:1px solid #d5dfdc;border-top:3pt solid #6d7b80;border-radius:5pt;padding:6pt 8pt}
+  #snap .sn-card.bad{border-top-color:#b04a25} #snap .sn-card.good{border-top-color:#2b7a57} #snap .sn-card.chg{border-top-color:#0b6b78}
+  #snap .sn-card h2{font-size:10pt;margin:0 0 4pt}
+  #snap .sn-card ul{list-style:none;margin:0;padding:0;display:grid;gap:4pt}
+  #snap .sn-card li{font-size:8.6pt;line-height:1.25}
+  #snap .sn-card li small{font-family:"Public Sans",sans-serif;font-size:7pt;color:#7a8b90}
+  #snap .sn-card li > span:last-child{display:block;color:#4b5d63;font-size:7.8pt}
+  #snap .sn-card li.e{color:#7a8b90}
+  #snap .sn-h{font-size:11pt;margin:0 0 3pt}
+  #snap .sn-t{width:100%;border-collapse:collapse;font-size:8.4pt}
+  #snap .sn-t th{text-align:left;font-size:7.5pt;text-transform:uppercase;letter-spacing:.05em;color:#4b5d63;border-bottom:1px solid #17252b;padding:2pt 4pt;font-weight:600;position:static;background:none;white-space:nowrap}
+  #snap .sn-t td{padding:1.6pt 4pt;border-top:1px solid #e3e9e7;position:static;background:none;white-space:nowrap;min-width:0;max-width:none;text-align:left}
+  #snap .sn-t td:first-child{white-space:normal}
+  #snap .sn-t .n{text-align:right;font-family:"IBM Plex Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+  #snap .sn-t .n small{font-family:"Public Sans",sans-serif;font-size:6.8pt;color:#7a8b90;font-weight:400}
+  #snap .sn-t tr.g td{background:#eaf0ee;font-weight:700;font-size:7.5pt;text-transform:uppercase;letter-spacing:.06em;color:#4b5d63;border-top:0;padding-top:2pt;padding-bottom:1pt}
+  #snap .sn-t tr{break-inside:avoid}
+  #snap .sn-t .y{color:#7a8b90;font-size:7.8pt}
+  #snap .r{font-size:7.9pt;font-weight:600;color:#4b5d63}
+  #snap .r.bad{color:#9a3c18} #snap .r.good{color:#226647}
+  #snap .sn-foot{margin-top:8pt;border-top:1px solid #d5dfdc;padding-top:5pt;font-size:7.6pt;color:#4b5d63;break-inside:avoid}
+  #snap .sn-foot p{margin:0 0 3pt} #snap .sn-foot b{color:#17252b}
+  #snap .sn-fine{color:#7a8b90}
+}
+</style>
 <script>
 (async function(){
 "use strict";
@@ -863,7 +908,7 @@ function renderProfile(){
   const le=MEAS.LIFEEXP, lev=le?le.latest[i]:NaN;
   let html=`<div class="hero"><span class="eyebrow">${esc(typeLine(i))}</span><div class="namerow"><h1>${esc(NAME[i])}</h1>${locIcon(i)}</div>
     <div class="meta"><span><b>${fmtPop(POP[i])}</b> residents</span>${isNaN(lev)?"":`<span>Life expectancy <b>${lev.toFixed(1)} years</b> <span class="faint">(US ${le.us.toFixed(1)})</span></span>`}${TYPE[i]==="county"?`<span class="faint">FIPS ${FIPS[i]}</span>`:""}</div>${NOTE[TYPE[i]]?`<p class="note" style="margin-top:6px">${NOTE[TYPE[i]]}</p>`:""}
-    <div class="actions"><button class="btn primary" id="toCmp">${S.cmp.includes(i)?"In comparison ✓":"Add to comparison"}</button>${TYPE[i]==="county"?`<button class="btn" id="toMap">See on the map</button>`:""}</div></div>`;
+    <div class="actions"><button class="btn primary" id="toCmp">${S.cmp.includes(i)?"In comparison ✓":"Add to comparison"}</button>${TYPE[i]==="county"?`<button class="btn" id="toMap">See on the map</button>`:""}<button class="btn" id="snapBtn" title="A one-page summary you can print or save as a PDF">Print snapshot (PDF)</button></div></div>`;
   html+=insights(i);
   const toc=[];
   html+=`<div class="legend-row"><span><i class="dot" style="background:var(--bad)"></i>Among the worst 25% of ${PEERN[TYPE[i]]}</span><span><i class="dot" style="background:var(--mid)"></i>Middle</span><span><i class="dot" style="background:var(--good)"></i>Among the best 25%</span><span><i style="width:2px;height:14px;background:var(--ink-2)"></i>US average</span><span><i style="width:2px;height:10px;background:var(--ink-3)"></i>${TYPE[i]==="county"||TYPE[i]==="city"?(STATES[ST[i]]||ST[i])+" average":""}</span><span><i style="width:22px;height:9px;border:1px solid var(--line);background:var(--surface-2);border-radius:2px"></i>Middle half of US ${PEERN[TYPE[i]]}</span></div>`;
@@ -882,6 +927,7 @@ function renderProfile(){
   el.querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{ e.preventDefault(); const t=document.getElementById(a.dataset.sec); if(!t)return; tocLock=Date.now(); setTocActive(a.dataset.sec); const y=a.dataset.sec==="sec-overview"?el.getBoundingClientRect().top+scrollY-8:t.getBoundingClientRect().top+scrollY-tocOffset(); window.scrollTo({top:Math.max(0,y),behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); });
   spyToc();
   el.querySelector("#toCmp").onclick=()=>{addCmp(i);setTab("compare");};
+  el.querySelector("#snapBtn").onclick=()=>printSnapshot(i);
   const tm=el.querySelector("#toMap"); if(tm) tm.onclick=()=>{setTab("map");};
   el.querySelectorAll("[data-state]").forEach(b=>b.onclick=()=>{setCur(+b.dataset.state);});
   el.querySelectorAll(".row").forEach(r=>{const go=(e)=>{if(e&&e.target&&e.target.closest(".srcchip"))return;window.scrollTo({top:0});const m=MEAS[r.dataset.m]; if(m.trend){S.trendM=m.id;store.set("trendM",m.id);setTab("trends");}else{S.mapM=m.id;store.set("mapM",m.id);setTab("map");}}; r.onclick=go; r.onkeydown=e=>{if(e.key==="Enter"&&!e.target.closest(".srcchip"))go();};});
@@ -889,6 +935,65 @@ function renderProfile(){
   el.querySelector("#csvP").onclick=()=>downloadCSV([i],"aperture-"+FIPS[i]+".csv");
 }
 
+
+// ---------- printable one-page snapshot ----------
+const SNAPKEY=[
+ ["Health conditions",["OBESITY","DIABETES","BPHIGH","DEPRESSION"]],
+ ["Daily habits",["CSMOKING","LPA","BINGE"]],
+ ["Care and coverage",["ACCESS2","CHECKUP","PCP","MHPROV"]],
+ ["Everyday needs",["FOODINSECU","HOUSINSECU","LACKTRPT","LONELINESS"]],
+ ["Deaths",["PREMDEATH","ODDEATH"]],
+ ["Community conditions",["POV150","INCOME"]]
+];
+const SITE="https://healthaperture.org/";
+function snapRank(m,v,i){ const c=concern(m,v,i); if(c===null) return {cls:"mid",txt:"Context"};
+  const pn=PEERN[TYPE[i]], b=Math.round(100-c);
+  if(c>=75) return {cls:"bad",txt:"Worse than "+Math.min(99,Math.round(c))+"% of US "+pn};
+  if(c<=25) return {cls:"good",txt:"Better than "+Math.min(99,b)+"% of US "+pn};
+  return {cls:"mid",txt:(c>50?"Worse":"Better")+" than "+Math.min(99,c>50?Math.round(c):b)+"% of US "+pn}; }
+function snapVal(m,v){ return fmt(m,v)+(UNITCAP[m.unit]&&m.unit!=="idx"&&m.unit!=="score25"?" <small>"+UNITCAP[m.unit]+"</small>":""); }
+function buildSnapshot(i){
+  const t=TYPE[i], local=t==="county"||t==="city", stI=local?STIDX[ST[i]]:null, stN=local?(STATES[ST[i]]||ST[i]):"";
+  const le=MEAS.LIFEEXP, lev=le?le.latest[i]:NaN;
+  const url=SITE+"?place="+encodeURIComponent(FIPS[i])+"#profile";
+  const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  // highlights
+  const all=Object.values(MEAS).filter(m=>m.cat!=="Social factors"&&!isNaN(m.latest[i])&&m.dir!==0);
+  const sc=all.map(m=>({m,v:m.latest[i],c:concern(m,m.latest[i],i)}));
+  const worst=sc.filter(x=>x.c>=80).sort((a,b)=>b.c-a.c).slice(0,3), best=sc.filter(x=>x.c<=20).sort((a,b)=>a.c-b.c).slice(0,3);
+  const hl=x=>`<li><b>${esc(x.m.label)}</b> <span class="mono">${snapVal(x.m,x.v)}</span><span>${esc(snapRank(x.m,x.v,i).txt)}</span></li>`;
+  const ch=[]; for(const m of Object.values(MEAS)){ if(!m.trend||m.id==="COLON_SCREEN"||m.src==="hps"||m.dir===0)continue; const pts=m.trend.years.map((y,k)=>[y,m.trend.arrs[k][i]]).filter(p=>!isNaN(p[1])); if(pts.length<3)continue; const a=pts[0],b=pts[pts.length-1]; ch.push({m,a,b,d:b[1]-a[1],z:(b[1]-a[1])/m.iqr}); }
+  ch.sort((x,y)=>Math.abs(y.z)-Math.abs(x.z));
+  const chl=c=>{const worse=(c.d>0)===(c.m.dir<0); return `<li><b>${esc(c.m.label)}</b> <span class="mono">${fmt(c.m,c.a[1])} → ${snapVal(c.m,c.b[1])}</span><span>${c.a[0]}–${c.b[0]} · ${worse?"getting worse":"improving"}</span></li>`;};
+  // key measures table
+  const used=new Set(); let rows="";
+  for(const [g,ids] of SNAPKEY){ const ms=ids.map(id=>MEAS[id]).filter(m=>m&&!isNaN(m.latest[i])); if(!ms.length) continue;
+    rows+=`<tr class="g"><td colspan="${local?6:5}">${esc(g)}</td></tr>`;
+    for(const m of ms){ const v=m.latest[i], r=snapRank(m,v,i); used.add(m.src); const sv=local&&stI!=null?m.latest[stI]:NaN;
+      rows+=`<tr><td>${esc(m.label)}</td><td class="n"><b>${snapVal(m,v)}</b></td>${local?`<td class="n">${isNaN(sv)?"—":fmt(m,sv)}</td>`:""}<td class="n">${isNaN(m.us)?"—":fmt(m,m.us)}</td><td><span class="r ${r.cls}">${r.cls==="bad"?"▲ ":r.cls==="good"?"● ":""}${esc(r.txt)}</span></td><td class="y">${m.lsrc&&m.lsrc[i]==="4"?"2022":esc(m.dy)}</td></tr>`; } }
+  for(const x of worst.concat(best)) used.add(x.m.src);
+  const srcs=[...used].map(k=>SRC[k]).filter(Boolean);
+  return `<div class="sn-head"><div class="sn-brand"><svg viewBox="0 0 30 30" width="26" height="26" aria-hidden="true">${apertureSVG(SCOPE_R[t]||4.4).replace(/var\(--accent\)/g,"#0b6b78").replace(/var\(--bg\)/g,"#ffffff")}</svg><span><b>Health Aperture</b><small>Community health snapshot</small></span></div><div class="sn-date">Printed ${esc(today)}<br>Data captured ${esc(RETRIEVED)}</div></div>
+  <div class="sn-place"><span class="sn-eye">${esc(typeLine(i))}</span><h1>${esc(NAME[i])}</h1>
+    <div class="sn-facts"><span><b>${fmtPop(POP[i])}</b> residents</span>${isNaN(lev)?"":`<span>Life expectancy <b>${lev.toFixed(1)} years</b> (US ${le.us.toFixed(1)})</span>`}${t==="county"?`<span>FIPS ${esc(FIPS[i])}</span>`:""}</div></div>
+  <div class="sn-cards">
+    <div class="sn-card bad"><h2>Needs attention</h2><ul>${worst.length?worst.map(hl).join(""):`<li class="e">No measure is among the worst 20% of US ${PEERN[t]}.</li>`}</ul></div>
+    <div class="sn-card good"><h2>Doing well</h2><ul>${best.length?best.map(hl).join(""):`<li class="e">No measure is among the best 20% of US ${PEERN[t]}.</li>`}</ul></div>
+    <div class="sn-card chg"><h2>Biggest changes</h2><ul>${ch.length?ch.slice(0,3).map(chl).join(""):`<li class="e">Not enough years of data to show change.</li>`}</ul></div>
+  </div>
+  <h2 class="sn-h">Key measures</h2>
+  <table class="sn-t"><thead><tr><th>Measure</th><th class="n">${esc(t==="region"?"Region":t==="state"?"State":"Here")}</th>${local?`<th class="n">${esc(stN)}</th>`:""}<th class="n">US</th><th>Compared with other US ${PEERN[t]}</th><th>Year</th></tr></thead><tbody>${rows}</tbody></table>
+  <div class="sn-foot"><p><b>How to read this.</b> Rankings compare ${esc(NAME[i])} with every US ${t==="region"?"state":TYPELBL[t].toLowerCase()} that has data. ▲ marks the worst quarter and ● the best quarter. Percentages describe adults unless noted. ${NOTE[t]?esc(NOTE[t].replace(/<[^>]+>/g,"")):""}</p>
+  <p><b>Sources.</b> ${esc(srcs.join(" · "))}. Full definitions, methods and a link to check every number: <b>${esc(url.replace("https://",""))}</b></p>
+  <p class="sn-fine">Health Aperture is an independent project by John Ho, CHW, and is not affiliated with CDC or HHS. Estimates are a snapshot and may not match newer releases.</p></div>`;
+}
+function ensureSnap(i){ let el=document.getElementById("snap"); if(!el){ el=document.createElement("div"); el.id="snap"; el.setAttribute("aria-hidden","true"); document.body.appendChild(el); }
+  el.innerHTML=buildSnapshot(i); document.body.classList.add("snapping"); return el; }
+function printSnapshot(i){ ensureSnap(i); const oldT=document.title; document.title=NAME[i].replace(/[\\/:*?"<>|]/g,"")+" health snapshot · Health Aperture";
+  const done=()=>{ document.body.classList.remove("snapping"); document.title=oldT; window.removeEventListener("afterprint",done); };
+  window.addEventListener("afterprint",done);
+  setTimeout(()=>{ try{ window.print(); }catch(e){ done(); } },60); }
+window.addEventListener("beforeprint",()=>{ if(S.tab==="profile"&&!document.body.classList.contains("snapping")){ ensureSnap(S.cur); const f=()=>{document.body.classList.remove("snapping");window.removeEventListener("afterprint",f);}; window.addEventListener("afterprint",f);} });
 // ---------- compare ----------
 function compareSummary(cs){
   if(cs.length<2) return `<section class="sum card"><p class="muted" style="margin:0">Add another place to see a written summary of how they compare.</p></section>`;
